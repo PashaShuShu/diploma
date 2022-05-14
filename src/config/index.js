@@ -4,4 +4,5 @@ export default {
   step: 0.05,
   K: (x, t) => x * (Math.exp(x * t) - 1),
   f: (x) => Math.exp(x),
+  epsilon: 0.01,
 };
