@@ -6,7 +6,7 @@ class GeneticServices {
       ? Math.random() * -1
       : Math.random();
 
-  _finMatrixOfGapValues = (gep, step) => {
+  _generateMatrixOfGapValues = (gep, step) => {
     const { a, b } = gep;
     const gapValue = b - a;
     const stepsNumber = Math.round(gapValue / step);
