@@ -1,6 +1,7 @@
 //import config from "../../config/index";
 
 import config from "../../config";
+import historyServices from "../historyServices";
 
 class GeneticServices {
   _getRandom = () =>
@@ -10,7 +11,7 @@ class GeneticServices {
 
   _getRandomInt = (min, max) => {
     min = Math.ceil(min);
-    max = Math.floor(max + 1);
+    max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min;
   };
 
@@ -21,20 +22,21 @@ class GeneticServices {
     const stepsNumber = Math.round(gapValue / step);
     const matrixOfValues = [];
     for (let i = 0; i < stepsNumber; i++) {
-      const a_i = a + i * step;
+      const t_i = a + i * step;
       for (let j = 0; j < stepsNumber; j++) {
-        const b_j = b + j * step;
-        matrixOfValues.push([a_i, b_j]);
+        const t_j = a + j * step;
+        matrixOfValues.push([t_i, t_j]);
       }
     }
     return matrixOfValues;
   };
 
   _generateParameters = (stepsNumber) => {
-    const z = [];
+    const parameters = [];
     for (let i = 0; i < stepsNumber; i++) {
-      z.push(this._getRandom());
+      parameters.push(this._getRandom());
     }
+    return parameters;
   };
 
   _findVectorOfDifference = (vectorA, vectorB) => {
@@ -58,18 +60,22 @@ class GeneticServices {
 
   _findMaxDifferenceValue = (z, matrixOfValues, calculatePolynomial) => {
     const { K } = config;
-    const polynomialValues = matrixOfValues.map(({ x, t }) => {
+    const polynomialValues = matrixOfValues.map(([x, t], index) => {
       return calculatePolynomial(z, { x, t });
     });
-    const functionValues = matrixOfValues.map(({ x, t }) => {
+
+    const functionValues = matrixOfValues.map(([x, t]) => {
       return K(x, t);
     });
+
     const vectorOfDifference = this._findVectorOfDifference(
       functionValues,
       polynomialValues
     );
 
-    const sortedVectorOfDifference = vectorOfDifference.sort((a, b) => b - a);
+    const sortedVectorOfDifference = vectorOfDifference
+      .map((value) => Math.abs(value))
+      .sort((a, b) => b - a);
 
     return sortedVectorOfDifference[0];
   };
@@ -83,24 +89,25 @@ class GeneticServices {
     for (let i = 0; i < numbersOfMultiplying; i++) {
       baseGenerations.forEach((baseGeneration) => {
         const newParametersVector = baseGeneration.map((_, index) => {
-          const indexOfGeneration = this._getRandomInt(0, numbersOfMultiplying);
+          const indexOfGeneration = this._getRandomInt(
+            0,
+            baseGenerations.length
+          );
           return baseGenerations[indexOfGeneration][index]; // can be error just swap places.
         });
         newGenerations.push(newParametersVector);
       });
     }
+
+    return newGenerations;
   };
 
   _generateParamsByGenetic = (
-    { parametersZ, matrixesOfValues },
+    { parameters, matrixesOfValues, calculatePolynomial },
     currentCycleNumber,
     finishCycleNumber
   ) => {
-    if (currentCycleNumber === finishCycleNumber) {
-      return parametersZ;
-    }
-
-    const vectorOfDifferences = parametersZ.map((z) => {
+    const vectorOfDifferences = parameters.map((z) => {
       return this._findMaxDifferenceValue(
         z,
         matrixesOfValues,
@@ -110,44 +117,54 @@ class GeneticServices {
 
     const theBestGenerationsIndexes = this._findIndexesOfTheBestParameters(
       vectorOfDifferences,
-      100
+      parameters.length / 4
+    );
+
+    historyServices.pushDifference(
+      vectorOfDifferences[theBestGenerationsIndexes[0]]
     );
 
     if (vectorOfDifferences[theBestGenerationsIndexes[0]] <= config.epsilon) {
-      return parametersZ;
+      return parameters;
     }
 
-    const bestGeneration = theBestGenerationsIndexes.map(
-      (index) => parametersZ[index]
+    const bestGenerations = theBestGenerationsIndexes.map(
+      (index) => parameters[index]
     );
 
-    const newGeneration = this._generateNewGenerationsOfParameters(
-      bestGeneration,
-      4
+    historyServices.pushGeneration(bestGenerations[0]);
+
+    if (currentCycleNumber === finishCycleNumber) {
+      return bestGenerations;
+    }
+
+    const newGenerations = this._generateNewGenerationsOfParameters(
+      bestGenerations,
+      3
     );
 
     return this._generateParamsByGenetic(
-      newGeneration,
+      { parameters: newGenerations, matrixesOfValues, calculatePolynomial },
       currentCycleNumber + 1,
       finishCycleNumber
     );
   };
 
-  findParameters = (stepsNumber, calculatePolynomial) => {
+  findParameters = (stepsNumber, calculatePolynomial, maxCycles = 200) => {
     const matrixesOfValues = this._generateMatrixOfGapValues();
-    const parametersZ = [];
+    const parameters = [];
 
     for (let i = 0; i < 400; i++) {
-      parametersZ.push(this._generateParameters(stepsNumber));
+      parameters.push(this._generateParameters(stepsNumber));
     }
 
-    const theBestGeneration = _generateParamsByGenetic(
-      { parametersZ, matrixesOfValues },
+    const theBestGeneration = this._generateParamsByGenetic(
+      { parameters, matrixesOfValues, calculatePolynomial },
       0,
-      400
+      maxCycles
     );
 
-    return theBestGeneration;
+    return theBestGeneration[0];
   };
 }
 

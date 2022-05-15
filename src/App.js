@@ -1,10 +1,11 @@
-import './App.css';
-import 'antd/dist/antd.min.css';
+import "./App.css";
+import "antd/dist/antd.min.css";
+import MainPage from "./pages/MainPage";
 
 function App() {
   return (
     <div className="App">
-      Hello world 
+      <MainPage />
     </div>
   );
 }
