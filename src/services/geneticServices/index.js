@@ -60,7 +60,7 @@ class GeneticServices {
 
   _findMaxDifferenceValue = (z, matrixOfValues, calculatePolynomial) => {
     const { K } = config;
-    const polynomialValues = matrixOfValues.map(([x, t], index) => {
+    const polynomialValues = matrixOfValues.map(([x, t]) => {
       return calculatePolynomial(z, { x, t });
     });
 
@@ -93,6 +93,9 @@ class GeneticServices {
             0,
             baseGenerations.length
           );
+          if (this._getRandomInt(0, baseGenerations.length * 2) === 6) {
+            return this._getRandom;
+          }
           return baseGenerations[indexOfGeneration][index]; // can be error just swap places.
         });
         newGenerations.push(newParametersVector);
@@ -150,12 +153,12 @@ class GeneticServices {
     );
   };
 
-  findParameters = (stepsNumber, calculatePolynomial, maxCycles = 200) => {
+  findParameters = (stepsNumber, calculatePolynomial, maxCycles = 400) => {
     const matrixesOfValues = this._generateMatrixOfGapValues();
     const parameters = [];
 
     for (let i = 0; i < 400; i++) {
-      parameters.push(this._generateParameters(stepsNumber));
+      parameters.push(this._generateParameters(stepsNumber * stepsNumber));
     }
 
     const theBestGeneration = this._generateParamsByGenetic(

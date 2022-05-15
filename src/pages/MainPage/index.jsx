@@ -12,46 +12,46 @@ const MainPage = () => {
   const calculate = () => {
     const approximatedFunction = approximationServices.polynomial;
     const generatedProperties = geneticServices.findParameters(
-      6,
+      2,
       approximatedFunction
     );
 
     const dif = historyServices.getDifference();
-    const gen = historyServices.getGeneration();
-    const length = dif.length;
-
-    console.log("Dif:", dif[length - 1]);
-    console.log("Gen:", gen[length - 1]);
-
     console.log("Prop:", generatedProperties);
 
     setGenAlgorithmRes((old) => {
       return [
         ...old,
         {
-          dif: dif[length - 1],
-          gen: gen[length - 1],
+          dif: dif.sort(),
           properties: generatedProperties,
         },
       ];
     });
   };
 
-  const onButtonClick = () => {
+  const onCalculateClick = () => {
     calculate();
+    historyServices.clearAll();
+  };
+
+  const onClearClick = () => {
+    setGenAlgorithmRes([]);
   };
 
   return (
     <div>
       <h1>Main page</h1>
-      <Button onClick={onButtonClick}>Calculate</Button>
+      <Button onClick={onCalculateClick}>Calculate</Button>{" "}
+      <Button type="primary" onClick={onClearClick}>
+        Clear
+      </Button>
       {genAlgorithmRes.map((result, index) => {
         return (
           <Row key={index}>
-            <Col span={8}>Dif: {roundNumber(result.dif)}</Col>
             <Col span={8}>
-              Gen: [
-              {result.gen.map((value, index) => {
+              Dif: [
+              {result.dif.map((value, index) => {
                 return <span key={index}>{roundNumber(value)}; </span>;
               })}
               ]
