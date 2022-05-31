@@ -158,7 +158,7 @@ class GeneticServices {
     const parameters = [];
 
     for (let i = 0; i < 400; i++) {
-      parameters.push(this._generateParameters(stepsNumber * stepsNumber));
+      parameters.push(this._generateParameters(stepsNumber));
     }
 
     const theBestGeneration = this._generateParamsByGenetic(

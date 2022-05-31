@@ -5,4 +5,10 @@ export default {
   K: (x, t) => x * (Math.exp(x * t) - 1),
   f: (x) => Math.exp(x) - x,
   epsilon: 0.001,
+  K: (x) =>
+    Math.exp(x) -
+    x -
+    0.50102 * Math.pow(x, 2) -
+    0.16713 * Math.pow(x, 3) -
+    0.0422 * Math.pow(x, 2),
 };
