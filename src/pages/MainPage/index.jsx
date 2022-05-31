@@ -1,5 +1,4 @@
 import { Button } from "antd";
-import { useEffect, useState } from "react";
 import config from "../../config";
 import approximationServices from "../../services/approximationServices";
 import geneticServices from "../../services/geneticServices";
@@ -12,9 +11,10 @@ const { f } = config;
 const MainPage = () => {
   const calculate = () => {
     const { polynomial, polynomialWithOneVariable } = approximationServices;
-    const generatedProperties = geneticServices.findParameters(2, polynomial);
+    const generatedProperties = geneticServices.findParameters(4, polynomial);
     const dif = historyServices.getDifference();
-
+    console.log(dif);
+    console.log(generatedProperties);
     const yFunction = (x) =>
       f(x) - polynomialWithOneVariable(generatedProperties, { x });
     console.log(yFunction(0));
