@@ -11,13 +11,16 @@ const { f } = config;
 const MainPage = () => {
   const calculate = () => {
     const { polynomial, polynomialWithOneVariable } = approximationServices;
-    const generatedProperties = geneticServices.findParameters(4, polynomial);
+    const generatedProperties = geneticServices.findParameters(3, polynomial);
     const dif = historyServices.getDifference();
     console.log(dif);
     console.log(generatedProperties);
     const yFunction = (x) =>
       f(x) - polynomialWithOneVariable(generatedProperties, { x });
-    console.log(yFunction(0));
+    console.log(yFunction(0.2));
+    console.log(yFunction(0.4));
+    console.log(yFunction(0.6));
+    console.log(yFunction(0.8));
     console.log(yFunction(1));
   };
 

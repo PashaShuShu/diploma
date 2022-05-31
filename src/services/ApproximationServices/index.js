@@ -14,8 +14,8 @@ class ApproximationServices {
     const zCount = z.length;
     let sum = 0;
 
-    for (let i = 0; i < zCount; i++) {
-      sum += z[i] * Math.pow(x, i);
+    for (let i = 2; i < zCount + 2; i++) {
+      sum += z[i - 2] * Math.pow(x, i);
     }
     return sum;
   };
