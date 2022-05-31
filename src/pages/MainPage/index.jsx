@@ -1,33 +1,24 @@
-import { Button, Row, Col } from "antd";
-import { useState } from "react";
+import { Button } from "antd";
+import { useEffect, useState } from "react";
+import config from "../../config";
 import approximationServices from "../../services/approximationServices";
 import geneticServices from "../../services/geneticServices";
 import historyServices from "../../services/historyServices";
 
 const roundNumber = (value) => Math.round(value * 1000) / 1000;
 
+const { f } = config;
+
 const MainPage = () => {
-  const [genAlgorithmRes, setGenAlgorithmRes] = useState([]);
-
   const calculate = () => {
-    const approximatedFunction = approximationServices.polynomial;
-    const generatedProperties = geneticServices.findParameters(
-      2,
-      approximatedFunction
-    );
-
+    const { polynomial, polynomialWithOneVariable } = approximationServices;
+    const generatedProperties = geneticServices.findParameters(2, polynomial);
     const dif = historyServices.getDifference();
-    console.log("Prop:", generatedProperties);
 
-    setGenAlgorithmRes((old) => {
-      return [
-        ...old,
-        {
-          dif: dif.sort(),
-          properties: generatedProperties,
-        },
-      ];
-    });
+    const yFunction = (x) =>
+      f(x) - polynomialWithOneVariable(generatedProperties, { x });
+    console.log(yFunction(0));
+    console.log(yFunction(1));
   };
 
   const onCalculateClick = () => {
@@ -35,9 +26,7 @@ const MainPage = () => {
     historyServices.clearAll();
   };
 
-  const onClearClick = () => {
-    setGenAlgorithmRes([]);
-  };
+  const onClearClick = () => {};
 
   return (
     <div>
@@ -46,26 +35,6 @@ const MainPage = () => {
       <Button type="primary" onClick={onClearClick}>
         Clear
       </Button>
-      {genAlgorithmRes.map((result, index) => {
-        return (
-          <Row key={index}>
-            <Col span={8}>
-              Dif: [
-              {result.dif.map((value, index) => {
-                return <span key={index}>{roundNumber(value)}; </span>;
-              })}
-              ]
-            </Col>
-            <Col span={8}>
-              Prop: [
-              {result.properties.map((value, index) => {
-                return <span key={index}>{roundNumber(value)}; </span>;
-              })}
-              ]
-            </Col>
-          </Row>
-        );
-      })}
     </div>
   );
 };

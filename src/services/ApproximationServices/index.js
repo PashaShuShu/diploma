@@ -12,6 +12,16 @@ class ApproximationServices {
     }
     return sum;
   };
+
+  polynomialWithOneVariable = (z, { x }) => {
+    const zCount = z.length;
+    let sum = 0;
+
+    for (let i = 0; i < zCount; i++) {
+      sum += z[i] * Math.pow(x, i);
+    }
+    return sum;
+  };
 }
 
 const approximationServices = new ApproximationServices();

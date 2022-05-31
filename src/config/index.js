@@ -3,6 +3,6 @@ export default {
   gep: { a: 0, b: 1 },
   step: 0.1,
   K: (x, t) => x * (Math.exp(x * t) - 1),
-  f: (x) => Math.exp(x),
+  f: (x) => Math.exp(x) - x,
   epsilon: 0.01,
 };
