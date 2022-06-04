@@ -10,6 +10,6 @@ const config = {
     x -
     0.50102 * Math.pow(x, 2) -
     0.16713 * Math.pow(x, 3) -
-    0.0422 * Math.pow(x, 2),
+    0.0422 * Math.pow(x, 4),
 };
 export default config;
