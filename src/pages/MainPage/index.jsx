@@ -15,9 +15,9 @@ const MainPage = () => {
     const { polynomial, polynomialWithOneVariable } = approximationServices;
     const K_ = config.K_;
     const generatedProperties = geneticServices.findParameters(
-      6,
+      3,
       polynomial,
-      100
+      10
     );
     const dif = historyServices.getDifference();
     const yFunction = (x) =>

@@ -72,7 +72,7 @@ const Graphic = ({ tableData }) => {
   return (
     <Row>
       <Col span={24}>
-        <b>Dif: </b>[{tableData.dif.join("; ")}]
+        <b>Dif: </b>[{tableData.dif.map((a) => roundNumber(a)).join("; ")}]
       </Col>
       <Col span={24}>
         <b>Gens: </b> (

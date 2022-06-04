@@ -59,7 +59,7 @@ class GeneticServices {
   };
 
   _findMaxDifferenceValue = (z, matrixOfValues, calculatePolynomial) => {
-    const K = config.K;
+    const K = config.K_;
     const polynomialValues = matrixOfValues.map(([x, t]) => {
       return calculatePolynomial(z, { x, t });
     });
