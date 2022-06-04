@@ -6,45 +6,57 @@ const gapValue = b - a;
 const stepsNumber = Math.round(gapValue / step);
 
 class ApproximationServices {
-  _findFk = (t, zCount) => {
-    const fk = [];
-    let FK = 0;
-    for (let j = 0; j < zCount; j++) {
-      let sum = 0;
-      const t = j * step;
-      for (let i = 1; i < zCount + 1; i++) {
-        sum += Math.pow(t, i) * f(t);
+  _deter = (A) => {
+    var n = A.length,
+      subA = [],
+      detA = 0;
+    if (n == 1) return A[0][0];
+    if (n == 2) return A[0][0] * A[1][1] - A[0][1] * A[1][0];
+    if (n == 3) {
+      return (
+        A[0][0] * A[1][1] * A[2][2] +
+        A[0][1] * A[1][2] * A[2][0] +
+        A[0][2] * A[1][0] * A[2][1] -
+        (A[0][0] * A[1][2] * A[2][1] +
+          A[0][1] * A[1][0] * A[2][2] +
+          A[0][2] * A[1][1] * A[2][0])
+      );
+    }
+    for (var i = 0; i < n; i++) {
+      for (var h = 0; h < n - 1; h++) subA[h] = [];
+      for (var a = 1; a < n; a++) {
+        for (var b = 0; b < n; b++) {
+          if (b < i) subA[a - 1][b] = A[a][b];
+          else if (b > i) subA[a - 1][b - 1] = A[a][b];
+        }
       }
-      fk.push(sum);
+      var sign = i % 2 == 0 ? 1 : -1;
+      detA += sign * A[0][i] * Determinant(subA);
     }
-    for (let j = 0; j < zCount - 1; j++) {
-      FK += ((fk[j] + fk[j + 1]) / 2) * step;
-    }
-    return FK;
+    return detA;
   };
 
-  _findAk = (zCount, z) => {
-    const fk = [];
-    let FK = 0;
-    for (let j = 0; j < zCount; j++) {
-      let sum = 0;
-      const t = j * step;
-      for (let i = 2; i < zCount + 2; i++) {
-        sum += z[i - 2] * Math.pow(t, i) * Math.pow(t, i - 1);
-      }
-      fk.push(sum);
-    }
-    for (let j = 0; j < zCount - 1; j++) {
-      FK += ((fk[j] + fk[j + 1]) / 2) * step;
-    }
-    return FK;
+  _kramerMethod = ({ n, m, l }) => {
+    const deter = this._deter(m);
+    const c = l.map((a, i) => {
+      const newM = m.map((row, index) => {
+        if (index === i) return l;
+        return row;
+      });
+      return this._deter(newM) / deter;
+    });
+    return c;
   };
+
+  _findFk = ({ t, zCount }) => {};
+
+  _findAk = ({ t, zCount, z }) => {};
 
   _findC = (z) => {
     const zCount = z.length;
 
-    const fk = this._findFk(zCount);
-    const ak = this._findAk(zCount, z);
+    const fk = this._findFk({ zCount });
+    const ak = this._findAk({ zCount, z });
 
     console.log(fk);
     console.log(ak);

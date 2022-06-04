@@ -3,7 +3,6 @@ import { useState } from "react";
 import config from "../../config";
 import approximationServices from "../../services/approximationServices";
 import geneticServices from "../../services/geneticServices";
-import historyServices from "../../services/historyServices";
 import Graphic from "../../components/Graphic";
 
 const { f } = config;
@@ -19,12 +18,10 @@ const MainPage = () => {
       polynomial,
       10
     );
-    const dif = historyServices.getDifference();
     const yFunction = (x) =>
       f(x) - polynomialWithOneVariable(generatedProperties, { x });
 
     setTableData({
-      dif,
       generatedProperties,
       K_,
       yFunction,
@@ -33,7 +30,6 @@ const MainPage = () => {
 
   const onCalculateClick = () => {
     calculate();
-    historyServices.clearAll();
   };
 
   const onClearClick = () => {

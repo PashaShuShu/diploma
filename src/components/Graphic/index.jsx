@@ -42,7 +42,7 @@ const Graphic = ({ tableData }) => {
   const data2 = [];
   const step = 0.1;
   const start = -0.1;
-  const n = (1 - start + 1) / step;
+  const n = (1 - start) / step;
   for (let i = 0; i <= n; i++) {
     const value = roundNumber(start + step * i);
     labels.push(`${value}`);
@@ -69,10 +69,15 @@ const Graphic = ({ tableData }) => {
     ],
   };
 
+  const dif = data1.map((a, i) => roundNumber(a - data2[i])).sort()[
+    data1.length - 1
+  ];
+
   return (
     <Row>
       <Col span={24}>
-        <b>Dif: </b>[{tableData.dif.map((a) => roundNumber(a)).join("; ")}]
+        <b>Dif: </b>
+        {dif}
       </Col>
       <Col span={24}>
         <b>Gens: </b> (

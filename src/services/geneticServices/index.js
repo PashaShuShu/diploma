@@ -1,7 +1,6 @@
 //import config from "../../config/index";
 
 import config from "../../config";
-import historyServices from "../historyServices";
 
 class GeneticServices {
   _getRandom = () =>
@@ -123,10 +122,6 @@ class GeneticServices {
       parameters.length / 4
     );
 
-    historyServices.pushDifference(
-      vectorOfDifferences[theBestGenerationsIndexes[0]]
-    );
-
     if (vectorOfDifferences[theBestGenerationsIndexes[0]] <= config.epsilon) {
       return parameters;
     }
@@ -134,8 +129,6 @@ class GeneticServices {
     const bestGenerations = theBestGenerationsIndexes.map(
       (index) => parameters[index]
     );
-
-    historyServices.pushGeneration(bestGenerations[0]);
 
     if (currentCycleNumber === finishCycleNumber) {
       return bestGenerations;
