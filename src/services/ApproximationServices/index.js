@@ -10,9 +10,9 @@ class ApproximationServices {
     var n = A.length,
       subA = [],
       detA = 0;
-    if (n == 1) return A[0][0];
-    if (n == 2) return A[0][0] * A[1][1] - A[0][1] * A[1][0];
-    if (n == 3) {
+    if (n === 1) return A[0][0];
+    if (n === 2) return A[0][0] * A[1][1] - A[0][1] * A[1][0];
+    if (n === 3) {
       return (
         A[0][0] * A[1][1] * A[2][2] +
         A[0][1] * A[1][2] * A[2][0] +
@@ -30,13 +30,13 @@ class ApproximationServices {
           else if (b > i) subA[a - 1][b - 1] = A[a][b];
         }
       }
-      var sign = i % 2 == 0 ? 1 : -1;
-      detA += sign * A[0][i] * Determinant(subA);
+      var sign = i % 2 === 0 ? 1 : -1;
+      detA += sign * A[0][i] * this._deter(subA);
     }
     return detA;
   };
 
-  _kramerMethod = ({ n, m, l }) => {
+  _kramerMethod = ({ m, l }) => {
     const deter = this._deter(m);
     const c = l.map((a, i) => {
       const newM = m.map((row, index) => {
@@ -48,20 +48,58 @@ class ApproximationServices {
     return c;
   };
 
-  _findFk = ({ t, zCount }) => {};
+  _findIntegral = (values) => {
+    const length = values.length;
+    let sum = 0;
+    for (let i = 0; i < length - 1; i++) {
+      sum += ((values[i] + values[i + 1]) / 2) * step;
+    }
+    return sum;
+  };
 
-  _findAk = ({ t, zCount, z }) => {};
+  _findFk = ({ zCount, k }) => {
+    const fk_arr = [];
+    for (let i = 0; i < zCount; i++) {
+      const t = i * step;
+      fk_arr.push(Math.pow(t, k) * f(t));
+    }
+    return this._findIntegral(fk_arr);
+  };
+
+  _findAk = ({ zCount, z, j, k }) => {
+    const ak_arr = [];
+    for (let i = 0; i < zCount; i++) {
+      const t = i * step;
+      ak_arr.push(z[i] * Math.pow(t, k) * Math.pow(t, j));
+    }
+    return this._findIntegral(ak_arr);
+  };
 
   _findC = (z) => {
     const zCount = z.length;
+    const fk = [];
+    const ak = [];
+    for (let i = 0; i < zCount; i++) {
+      let akj = [];
+      for (let j = 0; j < zCount; j++) {
+        akj.push(this._findAk({ zCount, z, j: j + 2, k: i + 1 }));
+      }
+      fk.push(this._findFk({ zCount, k: i + 1 }));
+      ak.push(akj);
+    }
 
-    const fk = this._findFk({ zCount });
-    const ak = this._findAk({ zCount, z });
+    const m = ak.map((a, index) => {
+      return a.map((s, index_) => {
+        if (index === index_) {
+          return -1 * lambda * (s + 1);
+        }
+        return -1 * lambda * s;
+      });
+    });
 
-    console.log(fk);
-    console.log(ak);
+    const c = this._kramerMethod({ m, l: fk });
 
-    return [0.4987, -0.16455, -0.5057];
+    return c;
   };
 
   polynomial = (z, { x, t }) => {
