@@ -15,7 +15,7 @@ const MainPage = () => {
     const { polynomial, polynomialWithOneVariable } = approximationServices;
     const K_ = config.K_;
     const generatedProperties = geneticServices.findParameters(
-      5,
+      6,
       polynomial,
       10
     );

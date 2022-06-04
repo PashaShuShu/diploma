@@ -42,8 +42,8 @@ const Table = ({ tableData }) => {
   const data2 = [];
   const step = 0.1;
   const start = -0.1;
-
-  for (let i = 0; i <= 11; i++) {
+  const n = (1 - start + step) / step;
+  for (let i = 0; i <= n; i++) {
     const value = roundNumber(start + step * i);
     labels.push(`${value}`);
     data1.push(tableData.yFunction(value));
@@ -54,6 +54,7 @@ const Table = ({ tableData }) => {
     labels,
     datasets: [
       {
+        drawActiveElementsOnTop: false,
         label: "K function",
         data: data2,
         borderColor: "rgb(255, 99, 132)",
