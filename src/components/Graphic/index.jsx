@@ -36,13 +36,13 @@ const options = {
   },
 };
 
-const Table = ({ tableData }) => {
+const Graphic = ({ tableData }) => {
   const labels = [];
   const data1 = [];
   const data2 = [];
   const step = 0.1;
   const start = -0.1;
-  const n = (1 - start + step) / step;
+  const n = (1 - start + 1) / step;
   for (let i = 0; i <= n; i++) {
     const value = roundNumber(start + step * i);
     labels.push(`${value}`);
@@ -90,4 +90,4 @@ const Table = ({ tableData }) => {
   );
 };
 
-export default Table;
+export default Graphic;

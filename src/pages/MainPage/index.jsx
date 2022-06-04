@@ -4,7 +4,7 @@ import config from "../../config";
 import approximationServices from "../../services/approximationServices";
 import geneticServices from "../../services/geneticServices";
 import historyServices from "../../services/historyServices";
-import Table from "../../components/Table";
+import Graphic from "../../components/Graphic";
 
 const { f } = config;
 
@@ -17,7 +17,7 @@ const MainPage = () => {
     const generatedProperties = geneticServices.findParameters(
       6,
       polynomial,
-      10
+      100
     );
     const dif = historyServices.getDifference();
     const yFunction = (x) =>
@@ -47,7 +47,7 @@ const MainPage = () => {
       <Button type="primary" onClick={onClearClick}>
         Clear
       </Button>
-      {tableData && <Table tableData={tableData} />}
+      {tableData && <Graphic tableData={tableData} />}
     </div>
   );
 };
