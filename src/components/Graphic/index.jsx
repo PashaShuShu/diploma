@@ -69,14 +69,8 @@ const Graphic = ({ tableData }) => {
     ],
   };
 
-  const dif = data1.map((a, i) => roundNumber(a - data2[i])).sort()[1];
-
   return (
     <Row>
-      <Col span={24}>
-        {/* <b>Dif: </b> */}
-        {/* {dif} */}
-      </Col>
       <Col span={24}>
         <b>Gens: </b> (
         {tableData.generatedProperties.map((a) => roundNumber(a)).join("; ")})
