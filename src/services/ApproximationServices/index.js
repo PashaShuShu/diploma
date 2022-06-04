@@ -81,10 +81,10 @@ class ApproximationServices {
     const ak = [];
     for (let i = 0; i < zCount; i++) {
       let akj = [];
+      fk.push(this._findFk({ zCount, k: i + 1 }));
       for (let j = 0; j < zCount; j++) {
         akj.push(this._findAk({ zCount, z, j: j + 2, k: i + 1 }));
       }
-      fk.push(this._findFk({ zCount, k: i + 1 }));
       ak.push(akj);
     }
 
@@ -96,9 +96,9 @@ class ApproximationServices {
         return -1 * lambda * s;
       });
     });
-
+    console.log(m);
+    console.log(fk);
     const c = this._kramerMethod({ m, l: fk });
-
     return c;
   };
 
@@ -113,10 +113,12 @@ class ApproximationServices {
     return sum;
   };
 
-  polynomialWithOneVariable = (z, { x }) => {
+  polynomialWithOneVariable = (_z, { x }) => {
+    const z = [1.00923, 0.443055, 0.26401];
     const zCount = z.length;
     let sum = 0;
     const c = this._findC(z);
+    console.log(c);
     for (let i = 2; i < zCount + 2; i++) {
       sum += z[i - 2] * Math.pow(x, i) * c[i - 2];
     }
