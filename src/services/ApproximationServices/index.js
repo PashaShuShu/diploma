@@ -96,8 +96,6 @@ class ApproximationServices {
         return -1 * lambda * s;
       });
     });
-    console.log(m);
-    console.log(fk);
     const c = this._kramerMethod({ m, l: fk });
     return c;
   };
@@ -113,8 +111,7 @@ class ApproximationServices {
     return sum;
   };
 
-  polynomialWithOneVariable = (_z, { x }) => {
-    const z = [1.00923, 0.443055, 0.26401];
+  polynomialWithOneVariable = (z, { x }) => {
     const zCount = z.length;
     let sum = 0;
     const c = this._findC(z);
