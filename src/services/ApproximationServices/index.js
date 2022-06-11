@@ -1,6 +1,6 @@
 import config from "../../config";
 
-const { step, lambda, f } = config;
+const { step } = config;
 
 class ApproximationServices {
   _deter = (A) => {
@@ -58,7 +58,7 @@ class ApproximationServices {
     const fk_arr = [];
     for (let i = 0; i < zCount; i++) {
       const t = i * step;
-      fk_arr.push(t ** k * f(t));
+      fk_arr.push(t ** k * config.f(t));
     }
     return this._findIntegral(fk_arr);
   };
@@ -88,11 +88,13 @@ class ApproximationServices {
     const m = ak.map((a, index) => {
       return a.map((s, index_) => {
         if (index === index_) {
-          return -1 * lambda * (s + 1);
+          return -1 * s * config.lambda + 1;
         }
-        return -1 * lambda * s;
+        return -1 * s;
       });
     });
+    console.log(m);
+    console.log(fk);
     const c = this._kramerMethod({ m, l: fk });
     return c;
   };
@@ -111,10 +113,12 @@ class ApproximationServices {
   polynomialWithOneVariable = (z, x) => {
     const zCount = z.length;
     let sum = 0;
-    const c = this._findC(z);
+    const c = this._findC([1.00923, 0.443055, 0.26401]);
+    // const c = this._findC(z);
     // const c = [0.4987, -0.16455, -0.05057];
-    console.log(c);
-    for (let i = 0; i < zCount; i++) {
+    // console.log(c);
+    sum += x ** 2 * c[0] * config.lambda;
+    for (let i = 1; i < zCount; i++) {
       sum += x ** (i + 2) * c[i];
     }
     return sum;
