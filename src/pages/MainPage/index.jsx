@@ -19,7 +19,8 @@ const MainPage = () => {
       10
     );
     const yFunction = (x) =>
-      f(x) - polynomialWithOneVariable(generatedProperties, { x }) * 4 + 0.8;
+      f(x) +
+      config.lambda * polynomialWithOneVariable(generatedProperties, { x });
 
     setTableData({
       generatedProperties,

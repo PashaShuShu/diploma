@@ -43,7 +43,7 @@ const Graphic = ({ tableData }) => {
   const step = 0.1;
   const start = -0.1;
   const n = (1 - start) / step;
-  for (let i = 0; i <= n; i++) {
+  for (let i = 0; i <= n+100; i++) {
     const value = roundNumber(start + step * i);
     labels.push(`${value}`);
     data1.push(tableData.yFunction(value));

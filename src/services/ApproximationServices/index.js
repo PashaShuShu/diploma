@@ -61,7 +61,7 @@ class ApproximationServices {
     const fk_arr = [];
     for (let i = 0; i < zCount; i++) {
       const t = i * step;
-      fk_arr.push(Math.pow(t, k) * f(t));
+      fk_arr.push(t ** k * f(t));
     }
     return this._findIntegral(fk_arr);
   };
@@ -70,7 +70,7 @@ class ApproximationServices {
     const ak_arr = [];
     for (let i = 0; i < zCount; i++) {
       const t = i * step;
-      ak_arr.push(z[i] * Math.pow(t, k) * Math.pow(t, j));
+      ak_arr.push(z[i] * t ** k * t ** j);
     }
     return this._findIntegral(ak_arr);
   };
@@ -104,8 +104,8 @@ class ApproximationServices {
     const zCount = z.length;
     let sum = 0;
 
-    for (let i = 2; i < zCount + 2; i++) {
-      sum += z[i - 2] * Math.pow(x, i) * Math.pow(t, i - 1);
+    for (let i = 0; i < zCount; i++) {
+      sum += z[i] * x ** (i + 2) * t ** (i + 1);
     }
 
     return sum;
@@ -114,10 +114,10 @@ class ApproximationServices {
   polynomialWithOneVariable = (z, { x }) => {
     const zCount = z.length;
     let sum = 0;
-    const c = this._findC(z);
+    const c = [0.4987, -0.16455, -0.05057]; // this._findC(z);
     console.log(c);
-    for (let i = 2; i < zCount + 2; i++) {
-      sum += z[i - 2] * Math.pow(x, i) * c[i - 2];
+    for (let i = 0; i < zCount; i++) {
+      sum += x ** (i + 2) * c[i];
     }
     return sum;
   };
