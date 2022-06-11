@@ -5,7 +5,6 @@ import approximationServices from "../../services/approximationServices";
 import geneticServices from "../../services/geneticServices";
 import Graphic from "../../components/Graphic";
 
-const { f } = config;
 
 const MainPage = () => {
   const [tableData, setTableData] = useState(null);
@@ -19,8 +18,8 @@ const MainPage = () => {
       10
     );
     const yFunction = (x) =>
-      f(x) +
-      config.lambda * polynomialWithOneVariable(generatedProperties, { x });
+      config.f(x) +
+      config.lambda * polynomialWithOneVariable(generatedProperties, x);
 
     setTableData({
       generatedProperties,

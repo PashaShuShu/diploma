@@ -1,9 +1,6 @@
 import config from "../../config";
 
-const { step, gep, lambda, f } = config;
-const { a, b } = gep;
-const gapValue = b - a;
-const stepsNumber = Math.round(gapValue / step);
+const { step, lambda, f } = config;
 
 class ApproximationServices {
   _deter = (A) => {
@@ -111,11 +108,11 @@ class ApproximationServices {
     return sum;
   };
 
-  polynomialWithOneVariable = (z, { x }) => {
+  polynomialWithOneVariable = (z, x) => {
     const zCount = z.length;
     let sum = 0;
-    // const c = this._findC(z);
-    const c = [0.4987, -0.16455, -0.05057]; //
+    const c = this._findC(z);
+    // const c = [0.4987, -0.16455, -0.05057];
     console.log(c);
     for (let i = 0; i < zCount; i++) {
       sum += x ** (i + 2) * c[i];
