@@ -114,7 +114,8 @@ class ApproximationServices {
   polynomialWithOneVariable = (z, { x }) => {
     const zCount = z.length;
     let sum = 0;
-    const c = [0.4987, -0.16455, -0.05057]; // this._findC(z);
+    // const c = this._findC(z);
+    const c = [0.4987, -0.16455, -0.05057]; //
     console.log(c);
     for (let i = 0; i < zCount; i++) {
       sum += x ** (i + 2) * c[i];
